@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+<body>
+  <script>
+    
+    var currentFormData = '';
+
+    
+    //重写下载功能
+    function printWorkflow(){
+        gePrintData().then(res=>{
+            const windowURL = window.URL || window.webkitURL;
+            let fileName = decodeURI('XXXXXXX.doc');
+            let url = windowURL.createObjectURL(res);
+            let link = document.createElement('a');
+            link.style.display = 'none';
+            link.href = url;
+            link.setAttribute('download',`${fileName}`);
+            document.body.appendChild(link);
+            link.click();
+            link.remove();
+            
+        }).catch(err=>{
+            console.log(err)
+        })
+        
+    }
+    
+    //获取文件流
+    function gePrintData(){
+        return new Promise((resolve,reject)=>{
+            let arr_1 = Global.workflow.workItems.filter(item=>item.taskName == "部门负责人审核");
+            let opinionBoxUseDept = '';
+            for(let i of arr_1){opinionBoxUseDept+=i.opinionContent}
+            
+            let arr_2 = Global.workflow.workItems.filter(item=>item.taskName == "业务分管领导审核");
+            let opinionBoxLleader = '';
+            for(let i of arr_2){opinionBoxLleader+=i.opinionContent}
+            
+            let arr_3 = Global.workflow.workItems.filter(item=>item.taskName == "证照管理部门负责人审核");
+            let opinionBoxPrincipall = '';
+            for(let i of arr_3){opinionBoxPrincipall+=i.opinionContent}
+            
+            let arr_4 = Global.workflow.workItems.filter(item=>item.taskName == "证照管理员提供证照");
+            let opinionBoxOperator = '';
+            for(let i of arr_4){opinionBoxOperator+=i.opinionContent}
+            
+            //获取明细
+            let infoArr = [];
+            $("#certificateGrid tr[tabindex='-1']").each(((index)=>{infoArr.push($("#certificateGrid tr[tabindex='-1']")[index])}))
+            
+            let strArr = [];
+            for(let i of infoArr){
+                let item = i.innerText.trim().split(/\s+/);
+                let obj = {};
+                obj.name = item[0];
+                obj.type = item[1];
+                obj.num = item[2];
+                strArr.push(obj);
+            }
+            console.log("strArr",strArr)
+            
+            
+            
+            
+            let params = {
+                createTime:$("#createTime").val().split('-')[0]+'年'+$("#createTime").val().split('-')[1]+'月'+$("#createTime").val().split('-')[2]+'日',
+                use:$("#use").val(),
+                useDeptId:currentFormData.useDeptName,
+                
+                beginYear:$("#beginDate").val().split('-')[0],
+                beginMonth:$("#beginDate").val().split('-')[1],
+                beginDate:$("#beginDate").val().split('-')[2],
+                endYear:$("#endDate").val().split('-')[0],
+                endMonth:$("#endDate").val().split('-')[1],
+                endDate:$("#endDate").val().split('-')[2],
+                borrowUserName:$("#borrowUserName").val(),
+                borrowUserContact:$("#borrowUserContact").val(),
+                
+                returnUserName:$("#returnUserName").val()?$("#returnUserName").val():'',
+                returnDate:$("#returnDate").val()?$("#returnDate").val().split('-')[0]+'年'+$("#returnDate").val().split('-')[1]+'月'+$("#returnDate").val().split('-')[2]+'日':'',
+                confirmReturnUserName:$("#confirmReturnUserName").val()?$("#confirmReturnUserName").val():'',
+                confirmReturnDate:$("#confirmReturnDate").val()?$("#confirmReturnDate").val().split('-')[0]+'年'+$("#confirmReturnDate").val().split('-')[1]+'月'+$("#confirmReturnDate").val().split('-')[2]+'日':'',
+                
+                opinionBoxUseDept:opinionBoxUseDept,
+                opinionBoxLleader:opinionBoxLleader,
+                opinionBoxPrincipall:opinionBoxPrincipall,
+                opinionBoxOperator:opinionBoxOperator,
+                
+                sell:'',
+                sellCopy:'',
+                quality:'',
+                qualityCopy:'',
+                qualityNum:'',
+                envir:'',
+                envirCopy:'',
+                envirNum:'',
+                health:'',
+                healthCopy:'',
+                healthNum:'',
+                
+            }
+            let ret = ''
+            for (let it in params) {
+                ret += encodeURIComponent(it) + '=' + encodeURIComponent(params[it]) + '&'
+            }
+            ret = ret.substr(0,ret.length-1)
+            console.log('ret',ret)
+            
+            var xhr = new XMLHttpRequest();
+            let URL = 'XXXXXXXXXXXXXXXXXXXXXX';
+            xhr.open('POST', URL, true);
+            xhr.responseType = 'blob';//重要
+            xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
+            xhr.onload = function(e) {
+              if (this.status === 200) {
+                var blob = new Blob([xhr.response],{type: 'application/msword'});
+                resolve(blob)
+              }else{
+                reject('err')
+              }
+            };
+            
+            xhr.send(ret);
+            
+        })
+    }
+
+  </script>
+</body>
+</html>

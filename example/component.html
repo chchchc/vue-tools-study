@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>初识components</title>
+    <script type="text/javascript" src="../assetes/js/vue.js"></script>
+</head>
+<body>
+    <h1>components</h1>
+    <hr>
+    <div id="app-one">
+        <greeting></greeting>
+    </div>
+
+    <div id="app-two">
+        <greeting></greeting>
+    </div>
+
+
+    <script type="text/javascript">
+
+    Vue.component("greeting",{
+        template:`<p>
+                    {{name}}:大家好,我给大家介绍一下我的女朋友@关晓彤
+                    <button v-on:click="changeName">改名</button>
+                </p>
+                `,
+        data:function(){
+            return{
+                name:"鹿晗"
+            }
+        },
+        methods:{
+            changeName:function(){
+                this.name = "lin"
+            }
+        }
+    })
+
+        new Vue({
+            el:'#app-one',
+         });
+
+         new Vue({
+            el:'#app-two',
+         })
+    </script>
+</body>
+</html>

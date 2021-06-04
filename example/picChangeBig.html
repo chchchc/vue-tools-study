@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>图片放大功能</title>
+</head>
+<body>
+    <div>
+        12112121
+        <img src="../assetes/image/user.png" class='imgShow'/>
+    </div>
+</body>
+</html>
+
+<script>
+    //点击图片放大
+    $('.imgShow').click(function(){
+        console.log('eeeee')
+            // var width = $('.imgShow').width();
+            // console.log(width)          
+            // if(width == '200'){
+            //     $('.mengban').show();
+            //     $('.imgShow').addClass('changeImg')
+            // }
+            // $('.mengban').click(function(){
+            //     $('.imgShow').removeClass('changeImg')
+            //     $('.mengban').hide();
+            // })
+        })
+</script>
+
+<style>
+    .boxImg{
+            width: 4rem;height: 4rem;
+            border: .01rem solid #999999;
+            margin: 1rem auto;
+        }
+    .imgShow{
+        width: 100%;height: 100%;
+    }
+</style>

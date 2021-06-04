@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>v-bind</title>
+    <script type="text/javascript" src="../assetes/js/vue.js"></script>
+</head>
+<body>
+    <h1>v-bind</h1>
+    <hr>
+    <div id="app">
+        <p> <img v-bind:src="imgsrc" alt=""></p>
+       <p><a :href="weburl" target="_blank">website</a></p>
+       <hr>
+       <div :class="className">绑定class</div>
+       <div :class="{classA:isok}">绑定class中的判断</div>
+       <div :class="[classA,classB]">绑定class中的数组</div>
+       <div :class="isok?classA:classB">绑定class中的三元运算符</div>
+       <hr>
+       <div>
+           <input type="checkbox" id="isokok" v-model="isok">
+           <label for="isokok">isok = {{isok}}</label>
+       </div>
+       <hr>
+       <div :style="{color: colorgreen}">绑定style</div>
+       <div :style="styleObject">绑定style对象</div>
+        
+    </div>
+    <style>
+        .classA{
+            color:red;
+        }
+        .classB{
+            font-size: 150%;
+        }
+    </style>
+
+    <script type="text/javascript">
+    var app = new Vue({
+        el:'#app',
+        data:{
+            message:"你好 vue",
+            imgsrc:'http://blogimages.jspang.com/WechatIMG12.jpeg',
+            weburl:'https://www.jspang.com/',
+            className:"classA",
+            isok:true,
+            classA:"classA",
+            classB:"classB",
+            colorgreen:"green",
+            styleObject:{
+                color:"yellow",
+                fontSize:"20px",
+            }
+            
+        }
+    })
+    </script>
+</body>
+</html>

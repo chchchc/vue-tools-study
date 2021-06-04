@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>v-for示例</title>
+    <script type="text/javascript" src="../assetes/js/vue.js"></script>
+</head>
+
+<body>
+    <h1>v-for示例</h1>
+    <hr>
+    <div id="app">
+        <ul>
+            <li v-for="item in Sortitems">
+                {{item}}
+            </li>
+        </ul>
+        <hr>
+
+        <ul>
+            <li v-for="(item,index) in sortStudents">
+                {{index +1}}:{{item.name}}--{{item.age}}
+            </li>
+        </ul>
+
+        <template v-for="(item,index) in students">
+            <h3>{{index}} . {{item.name}}</h3>
+            <p>age  ----{{item.age}}</p>
+        </template>
+
+        <template v-for="(item,index) in students">
+           <div v-for="(key,val) in item"></div>
+           <p>{{key}},{{val}}</p>
+        </template>
+
+    </div>
+
+    <script type="text/javascript">
+        var app = new Vue({
+            el: '#app',
+            data: {
+                items: [53, 23, 7, 15, 88, 34],
+                students: [
+                    { name: 'jspang', age: 33 },
+                    { name: 'panda', age: 28 },
+                    { name: 'panpan', age: 23 },
+                    { name: 'king', age: 13 }
+                ]
+            },
+            computed: {
+                Sortitems: function () {
+                    return this.items.sort(sortNumber)
+                },
+                sortStudents:function(){
+                    return sortByKey(this.students,'age');
+                }
+            }
+        });
+        function sortNumber(a, b) {  //数字排序  得自己写一个排序方法 不能直接调用sort方法 有bug  这是通用bug
+            console.log('sssss', a)
+            console.log('sbbbbbb', b)
+            return a - b;
+        }
+        //数组对象方法排序:
+        function sortByKey(array, key) {
+            return array.sort(function (a, b) {
+                var x = a[key];
+                var y = b[key];
+                return ((x < y) ? -1 : ((x > y) ? 1 : 0));
+            });
+        }
+    </script>
+</body>
+
+</html>

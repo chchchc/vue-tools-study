@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>防抖节流</title>
+</head>
+<body>
+   <div>防抖节流实现</div>
+   <div>防抖节流实现</div>
+   <div>防抖节流实现</div>
+   <div>防抖节流实现</div>
+   <div>防抖节流实现</div>
+   <div>防抖节流实现</div>
+   <div>防抖节流实现</div>
+   <div>防抖节流实现</div>
+   <div>防抖节流实现</div>
+   <div>防抖节流实现</div>
+   <div>防抖节流实现</div>
+   <div>防抖节流实现</div>
+   <div>防抖节流实现</div>
+   <div>防抖节流实现</div>
+   <div>防抖节流实现</div>
+   <div>防抖节流实现</div>
+   <div>防抖节流实现</div>
+   <div>防抖节流实现</div>
+   <div>防抖节流实现</div>
+   <div>防抖节流实现</div>
+   <div>防抖节流实现</div>
+   <div>防抖节流实现</div>
+   <div>防抖节流实现</div>
+   <div>防抖节流实现</div>
+   <div>防抖节流实现</div>
+   <div>防抖节流实现</div>
+   <div>防抖节流实现</div>
+   <div>防抖节流实现</div>
+   <div>防抖节流实现</div>
+   <div>防抖节流实现</div>
+   <div>防抖节流实现</div>
+   <div>防抖节流实现</div>
+   <div>防抖节流实现</div>
+</body>
+</html>
+<script>
+    /* 
+    防抖定义：最常用于搜索   短时间内连续触发的事件 让他在某个时间期限内，事件处理函数只执行一次
+    思路 ：第一次触发时间时  不立马执行函数 而是给定一个时间 比如200ms
+    如果这个时间内没有再次触发滚动事件，那么就执行函数  
+    如果规定时间内再次触发滚动事件 那么当前计时取消 重新开始计时
+    效果：短时间内大量触发同一事件，只会执行一次函数
+      自我理解版本：一直滚动 就会一直调用debounce方法  一直清掉上一个定时器（上一个定时器没机会执行）
+      定时器重新赋值  这时候他还是一直滚动 所以一直在连续调用debounce方法 这时候  就会又清掉上一次的定时器
+      再创建一个新的定时器  他要是不滚动了 清理最上一个定时器后，以当前时间进行延迟计算 最后一个定时器就会在1秒后就执行里面的打印方法了
+    */
+    // function debounce(fn,delay){
+    //     let timer = null //借助闭包
+    //     return function(){
+    //         if(timer){
+    //             clearTimeout(timer)  //相当于取消执行定时模块的代码块
+    //         }
+    //         timer = setTimeout(fn,delay)
+    //         console.log('timer',timer)
+    //     }
+    // }
+
+    // function showTop(){
+    //     var scrollTop = document.body.scrollTop || document.documentElement.scrollTop;
+    //     console.log('滚动条位置: ' + scrollTop);
+    // }
+    // window.onscroll = debounce(showTop,1000)
+
+    /*
+    节流定义：常用于 浏览器的滑动 判断当前距离距离顶部多远
+    防抖的结果就是 只要一直滚动，就永远不会输出当前距离  改需求  如果需要每间隔一段时间  就给出距离顶部反馈呢
+    实现思路：让函数执行一次以后 在某个时间段暂时失效  过了这段时间再重新激活  就是每隔一段时间就执行一次（节流） 而不是每次调用都执行
+    节流与防抖的区别：节流与防抖的前提都是某个行为持续地触发，不同之处只要判断是要优化到减少它的执行次数还是只执行一次就行
+
+    */
+    function thro(fn,delay){
+        // debugger  定时器版本 
+        // let valid = true  //true 工作时间   false 休息时间
+        // return function(){
+        //     if(! valid){   //休息时间 不执行事件处理函数
+        //         return false
+        //     }
+        //     valid = false
+        //     setTimeout( ()=>{
+        //         fn()
+        //         valid = true;
+        //     },delay)
+        //     console.log('valid',valid)
+        // }
+        //  console.log('thisthisthis----',this)
+         // 时间戳版本
+         var last = 0;
+         return function(){
+             var _this = this;
+             var _arguments = arguments;
+            //  console.log('_this---',_this) //指向的window
+            //  console.log('_arguments',_arguments)
+             var now = new Date().getTime();
+            //  console.log('now',now)
+             if(now - last >delay){
+                 fn.apply(_this,_arguments)
+                // fn()
+                 last = now;
+             }
+         }
+    }
+
+    function showTop(){
+        // console.log('thisnnnnnnnn',this)
+        var scrollTop = document.body.scrollTop || document.documentElement.scrollTop;
+        // console.log('滚动位置1：'+ scrollTop);
+    }
+    window.onscroll = thro(showTop,2000)
+
+    
+</script>

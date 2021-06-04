@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>v-htm&v-text</title>
+    <script type="text/javascript" src="../assetes/js/vue.js"></script>
+</head>
+<body>
+    <h1>v-htm&v-text</h1>
+    <hr>
+    <div id="app">
+        <span>{{message}}</span>=<span v-text="message"></span><br/>
+        <span v-html="dodo"></span> 
+    </div>
+
+    <script type="text/javascript">
+    var app = new Vue({
+        el:'#app',
+        data:{
+            message:"你好 vue" ,  //用v-text的原因是以防javascript  变量出错  或者是网速慢 就加载不了message的原因
+            dodo:'<h2>hello word</h2>'   //有弊端 很容易被黑客攻击  特别是表单的提交   xss攻击
+        }
+
+    })
+    </script>
+</body>
+</html>

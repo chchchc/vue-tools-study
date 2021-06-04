@@ -1,0 +1,308 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <div>初识构造函数</div>
+    <button id="test">click me</button>
+  </body>
+</html>
+
+<script>
+  /*********************************************************/
+  function Ninjia() {
+    // console.log('this11',this)
+    this.skulk = function () {
+      // console.log('this2',this)  //指向的Ninjia
+      return this;
+    };
+    // return 1;   //不会被返回
+  }
+  var ninjia1 = new Ninjia();
+  // console.log('ninjia1.skulk',ninjia1.skulk())
+  // console.log('ninjia1',ninjia1)   //指向的是Ninjia
+
+  /************************如果返回的是对象 ，那么会优先返回对象的值*********************************/
+  var puppet = {
+    rules: false,
+  };
+  function Emperor() {
+    this.rules = true;
+    console.log("this----Emperor", this); //这里this指向的是Emperor
+    return puppet; //但是会优先返回对象
+  }
+  var emperor = new Emperor();
+  // console.log('emperor',emperor)  //这里是puppet
+  // console.log('emperor.rules',emperor.rules)   //这里返回的是puppet的 rules为false
+
+  /*********************************************************/
+  // function Button(){
+  //   this.clicked = false;
+  //   // console.log('this',this)   //指向的Button
+  //   this.click = function(){
+  //     this.clicked = true;
+  //     // console.log('this1:',this)  //这里的this指向了button dom元素
+  //     // console.log('button',button)   //Button
+  //     // console.log("button.clicked",button.clicked)   //false
+  //   }
+  // }
+  // var button = new Button();
+  // var ele = document.getElementById("test");
+  // // console.log('ele',ele)   //指向了button dom元素
+  // ele.addEventListener("click",button.click)
+
+  /**********使用call  apply 改变this指向***********************************************/
+  function juggle() {
+    var result = 0;
+    for (var n = 0; n < arguments.length; n++) {
+      result += arguments[n];
+    }
+    // console.log('this',this)  //分别指向的下面的ni1  ni2
+    return (this.result = result);
+  }
+  var ni1 = {
+    aa: "11",
+  };
+  var ni2 = {};
+  juggle.apply(ni1, [1, 2, 3, 4]); //数组形式
+  juggle.call(ni2, 5, 6, 7, 8); //单个参数形式
+  // console.log('ni1.result',ni1.result)
+  // console.log('ni2.result',ni2.result)
+
+  /**********使用箭头函数改变this指向***********************************************/
+  function Button() {
+    this.clicked = false;
+    // console.log('this',this)   //指向的Button
+    this.click = () => {
+      this.clicked = true;
+      // console.log('this1:',this)  //这里的this就指向了Button
+      // console.log('button',button)   //Button
+      // console.log("button.clicked",button.clicked)   //已经被改成true
+    };
+  }
+  var button = new Button();
+  var ele = document.getElementById("test");
+  // console.log('ele',ele)   //指向了button dom元素
+  ele.addEventListener("click", button.click);
+
+  /**********使用bind 改变this指向***********************************************/
+  var button = {
+    clicked: false,
+    click: function () {
+      this.clicked = true;
+      console.log("this", this); //指向的button
+      console.log("*******", button.clicked); //true
+    },
+  };
+  var elem = document.getElementById("test");
+  elem.addEventListener("click", button.click.bind(button)); //把this绑定给button对象
+  // elem.addEventListener("click",button.click)   //this指向的是button dom对象
+
+  var boundFunction = button.click.bind(button);
+  console.log("boundFunction", boundFunction); //指向的click函数
+  console.log("button.click", button.click); //指向的click函数
+
+  /***************************例子**************************************/
+  function showCar() {
+    var carr = new Car("Dodge", "Coronet R/T", 1968, "yellow");
+    // alert(carr.toJSONString());
+    console.log("car", carr); //指向的是Car
+  }
+  function Car(make, model, year, color) {
+    console.log("this", this); //指向的是Car
+    this.make = make;
+    this.model = model;
+    this.year = year;
+    this.color = color;
+  }
+  showCar();
+
+  /**************************理解闭包***************************************/
+  var outerValue = "abc";
+  var later;
+  function outerFunction() {
+    var innerValue = "nijia";
+    function innerFunction() {
+      console.log("outerValue", outerValue); //abc
+      console.log("innerValue", innerValue); //nijia
+    }
+    later = innerFunction;   //把内部函数给到了外部变量
+  }
+  outerFunction();
+  later();   //执行的时候   相当于执行了innerFunction(){。。打印outerValue,innerValue}
+                            //因为innerValue的作用域是只在outerFunction内的，
+                            //外部later()执行时，访问outerFunction()函数内部变量innerValue，
+                            //按道理是访问不了的【因为outerFunction函数执行完，里面无用变量会自行销毁】
+                            //但是他把一个函数抛出外面了，相当于别人已经保存了这个函数，
+                            // 那么问题来了 Tmd 人家只是保存了innerFunction函数呀  innerValue还是会被销毁了呀
+                            // 那为什么还能console.log(innerValue)的值等于“ninjia”
+//  解释
+//innerFuncion 的上下文里有outerFunction的内容，innerValue在outerFunciton的上下文里面 【把函数抛出去  相当于把上下文都抛出去了】
+// innerFunction 在执行时，会先把outerFunciton的上下文继承下来，然后再在自己的作用域上创建自己局部作用域，所以外面会把outerFunctio的上下文都拿到 
+// {
+//    ao:{innerVlaue:"ninjia"}  //指向的outerFunction的上下文
+//    ao1:{} //指向的是innerFunction的上下文
+// }                   
+
+/****************利用闭包实现结果缓存************************/
+ /* 备忘函数【ES6版本】 */
+// function memorize(fn) {
+//     const cache = {}
+//     return function(...args) {    //这里用...扩展运算符是为了保证传递过来的args参数为一个数组形式的  方便后面的apply调用
+//       // console.log('...args',args)     // args = [1] ,args = [1] , args = [2]
+//         const key = JSON.stringify(args)
+//         // console.log('key',key)
+//         // console.log('cache',cache)
+//         // console.log('this',this)
+//         return cache[key] || (cache[key] = fn.apply(fn, args))    //add.apply(add,args)  这里args是一个数组
+//     }
+// }
+
+/* 备忘函数 【ES5版本】*/
+function memorize(fn) {
+    var cache = {}
+    return function() {
+        // console.log('arguments',arguments)
+        //其实本质就是arguments这个对象使用了数组的slice这个方法，得到了参数构成的数组（也可以用apply）
+        var args = Array.prototype.slice.call(arguments)    //将具有length属性的对象转成数组
+        // console.log('args',args)
+        
+        var key = JSON.stringify(args)
+        return cache[key] || (cache[key] = fn.apply(fn, args))
+    }
+}
+
+/* 复杂计算函数 */
+function add(a) {
+    return a + 1
+}
+
+const adder = memorize(add)
+
+adder(1)            // 输出: 2    当前: cache: { '[1]': 2 }
+adder(1)            // 输出: 2    当前: cache: { '[1]': 2 }
+adder(2)            // 输出: 3    当前: cache: { '[1]': 2, '[2]': 3 }
+// console.log('adder',adder)
+
+/**************************将一个具有length属性的对象转换为数组例子*******************************************/
+//用法一
+var a = { 0: 'bob', 1: '12', 2: 'male', length: 3};
+// console.log('a',Array.prototype.slice.call(a)); //  ["bob", "12", "male"]
+
+//用法二： es6中提供了一个等价的方法实现上述功能Array.from(arguments)
+// Array.from方法用于将两类对象转为真正的数组：类似数组的对象（array-like object）和可遍历（iterable）的对象（包括 es6新增的数据结构Set 和 Map）。
+let bar = new Set(['a', 'b', 'c']);  //Set结构   【ES6新增的结构】
+// console.log('bar',bar)
+let changeForm = Array.from(bar ); // ['a', 'b', 'c'];
+// console.log('changeForm',changeForm)
+
+//扩展运算符(...)，它也可以将某些数据结构转换为数组
+function foo(a,b,c,d) {
+  //  console.log('arguments',arguments)
+  //  console.log(Array.prototype.slice.call(arguments));
+  //  console.log(Array.from(arguments));
+  //  console.log([...arguments]); // ["a", "b", "c", "d"]
+}
+foo("a","b","c","d");
+
+/******************************柯里化【还没看到】***************************************************/
+// 柯里化（Currying），又称部分求值（Partial Evaluation），
+// 是把接受多个参数的原函数变换成接受一个单一参数（原函数的第一个参数）的函数，
+// 并且返回一个新函数，新函数能够接受余下的参数，最后返回同原函数一样的结果。
+// 核心思想是把多参数传入的函数拆成单（或部分）参数函数，内部再返回调用下一个单（或部分）参数函数，依次处理剩余的参数。
+// 柯里化有3个常见作用：
+//  参数复用
+//  提前返回
+//  延迟计算/运行
+// ES5 方式
+function currying(fn) {
+    var rest1 = Array.prototype.slice.call(arguments)
+    console.log('arguments1',arguments)
+    console.log('rest1',rest1)
+    rest1.shift()
+    return function() {
+        var rest2 = Array.prototype.slice.call(arguments)
+        console.log('rest2',rest2)
+        return fn.apply(null, rest1.concat(rest2))
+    }
+}
+// // ES6 方式
+// function currying(fn, ...rest1) {
+//   return function(...rest2) {
+//     return fn.apply(null, rest1.concat(rest2))
+//   }
+// }
+// 用它将一个 sayHello 函数柯里化试试：
+function sayHello(name, age, fruit) {
+  console.log(console.log(`我叫 ${name},我 ${age} 岁了, 我喜欢吃 ${fruit}`))
+}
+
+var curryingShowMsg1 = currying(sayHello, '小明')
+curryingShowMsg1(22, '苹果')           // 输出: 我叫 小明,我 22 岁了, 我喜欢吃 苹果
+
+var curryingShowMsg2 = currying(sayHello, '小衰', 20)
+curryingShowMsg2('西瓜')               // 输出: 我叫 小衰,我 20 岁了, 我喜欢吃 西瓜
+
+/******************************反柯里化***************************************************/
+//柯里化是固定部分参数，返回一个接受剩余参数的函数，也称为部分计算函数，目的是为了缩小适用范围，创建一个针对性更强的函数。核心思想是把多参数传入的函数拆成单参数（或部分）函数，内部再返回调用下一个单参数（或部分）函数，依次处理剩余的参数。
+//而反柯里化，从字面讲，意义和用法跟函数柯里化相比正好相反，扩大适用范围，创建一个应用范围更广的函数。使本来只有特定对象才适用的方法，扩展到更多的对象。
+// ES5 方式
+function unCurrying(fn) {
+  return function (tar) {
+    var rest = Array.prototype.slice.call(arguments)
+    rest.shift()
+    return fn.apply(tar, rest)
+  }
+}
+
+// // ES6 方式
+// function unCurrying(fn) {
+//   return function(tar, ...argu) {
+//     return fn.apply(tar, argu)
+//   }
+// }
+//将 Array 上的 push 方法借出来给 arguments 这样的类数组增加一个元素
+var push = unCurrying(Array.prototype.push)
+
+function execPush() {
+  push(arguments, 4)
+  // console.log(arguments)
+}
+
+execPush(1, 2, 3)    // 输出: [1, 2, 3, 4]
+
+//区别： 简单说，函数柯里化就是对高阶函数的降阶处理，缩小适用范围，创建一个针对性更强的函数。
+//例子如下
+// function(arg1, arg2)              // => function(arg1)(arg2)
+// function(arg1, arg2, arg3)        // => function(arg1)(arg2)(arg3)
+// function(arg1, arg2, arg3, arg4)  // => function(arg1)(arg2)(arg3)(arg4)
+// function(arg1, arg2, ..., argn)   // => function(arg1)(arg2)…(argn)
+//而反柯里化就是反过来，增加适用范围，让方法使用场景更大。使用反柯里化, 可以把原生方法借出来，让任何对象拥有原生对象的方法。
+//例子如下
+// obj.func(arg1, arg2)        // => func(obj, arg1, arg2)
+
+// 可以这样理解柯里化和反柯里化的区别：
+// 柯里化是在运算前提前传参，可以传递多个参数；
+// 反柯里化是延迟传参，在运算时把原来已经固定的参数或者 this 上下文等当作参数延迟到未来传递。
+
+/******************************偏函数***************************************************/
+//偏函数是创建一个调用另外一个部分（参数或变量已预制的函数）的函数，函数可以根据传入的参数来生成一个真正执行的函数。
+//其本身不包括我们真正需要的逻辑代码，只是根据传入的参数返回其他的函数，返回的函数中才有真正的处理逻辑比如：
+//这样就用偏函数快速创建了一组判断对象类型的方法~
+var isType = function(type) {
+  return function(obj) {
+    return Object.prototype.toString.call(obj) === `[object ${type}]`
+  }
+}
+
+var isString = isType('String')
+var isFunction = isType('Function')
+//偏函数和柯里化的区别：
+// 柯里化是把一个接受 n 个参数的函数，由原本的一次性传递所有参数并执行变成了可以分多次接受参数再执行，
+// 例如：add = (x, y, z) => x + y + z→curryAdd = x => y => z => x + y + z；
+// 偏函数固定了函数的某个部分，通过传入的参数或者方法返回一个新的函数来接受剩余的参数，数量可能是一个也可能是多个；
+// 当一个柯里化函数只接受两次参数时，比如 curry()()，这时的柯里化函数和偏函数概念类似，可以认为偏函数是柯里化函数的退化版。
+</script>

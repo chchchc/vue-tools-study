@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>会议室预定</title>
+</head>
+<body>
+    <div>请打开控制台</div>
+    <script>
+    //  编程题  输入是一个数组，所有会议的开始时间和结束时间，输出一共需要多少个会议室
+    //  如[ [10,20],[20,30] ]  输出会议室个数 1    如[ [10,20],[19,30] ] 输出会议室个数 2
+    /**
+     * @param arr 类似[['8:00', '8:15']]
+     * 
+     */
+    var abc = getRoom([['8:00', '8:15'],['8:14','8:20']])
+    console.log('abc',abc)
+
+    function getRoom(arr) {
+      if(arr.length <= 1) return arr.length // 0或者1直接返回
+      let rooms = [] // 房间列表
+      /**
+       *  @description [{time,index}]  按时间展开返回的新数组 time 时间 index 原数组的索引
+       */
+      let newArr = []
+
+      arr.forEach((item,index) => {
+        let startSplit = item[0].split(':')
+        let endSplit = item[1].split(':')
+        let startTime = Number(startSplit[0] * 60 + startSplit[1]) // 算时间
+        let endTime = Number(endSplit[0] * 60 + endSplit[1])
+        newArr = newArr.concat([{time:startTime,index, flag: 0},{time:endTime,index,flag: 1}]) // 赋值给新数组
+      })
+      newArr.sort((a,b) => { // 排序
+        let sub = a.time-b.time
+        if (sub === 0){
+          return a.flag - b.flag
+        }
+        return sub
+      })
+      newArr.forEach((item,index) => { // 按新数组排序
+        if (!rooms.length) { // 首次进
+          rooms.push({usedTag: item.index}) // 记录是哪个会议用的
+        } else {
+          let seleted = rooms.find(e => e.usedTag === item.index) // 找用过的房间，如果找到，代表开会结束
+          if (seleted) {
+            seleted.usedTag = null // 释放房间
+          } else {
+            let empty = rooms.find(e => !e.usedTag) // 找空房间 找到就记录那个会议 没找到就开新房
+            if (empty) {
+              empty.usedTag = item.index
+            } else {
+              rooms.push({usedTag: item.index})
+            }
+          }
+        }
+      })
+      console.log('rrr', rooms.length)
+      return rooms.length
+    }
+    
+
+    //替换图片的后缀名
+     var attachList = [{url:'http://123.dec',name:'aa.png'},{url:'http://5678.dec',name:'bb.jpg'},{url:'http://8978.dec',name:'cc.png'}]
+    //map是返回一个新数组，不会影响原有数组
+     attachList.map(item=>{
+         item.url = item.url.split('.')[0] + '.'+ item.name.split('.')[1]
+     })
+     console.log('attachList_map',attachList)
+    // debugger
+    //  attachList.forEach((item,index)=>{
+    //     item.url = item.url.split('.')[0] + '.'+ item.name.split('.')[1]
+    //  })
+    //  console.log('attachList',attachList)
+    </script>
+</body>
+</html>

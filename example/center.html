@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>实现上下左右居中</title>
+</head>
+<body>
+    <!-- 画一条0.5px的直线-->
+    <div class="line"></div>
+
+     <!-- 实现水平垂直居中-->
+    <div>我是分割线</div>
+    <div class="content1">
+        <div class="box1"></div>
+    </div>
+    <div class="content2">
+        <div class="box2"></div>
+    </div>
+    <div class="content3">
+        <div class="box3"></div>
+    </div>
+    <div class="content4">
+        <div class="box4"></div>
+    </div>
+
+    <div class="content5">
+        <div class="box5"></div>
+    </div>
+    
+</body>
+</html>
+<script>
+    //relative：相对于原来位置移动，
+    //absolute 在父元素没有设置相对定位或绝对定位的情况下，元素相对于根元素定位（即html元素）（是父元素没有）
+    // 父元素设置了相对定位或绝对定位，元素会相对于离自己最近的设置了相对或绝对定位的父元素进行定位 （或者说离自己最近的不是static的父元素进行定位，因为元素默认是static）。
+    /*
+    1.思路（利用定位）：父级相对定位，子级绝对定位 而四个定位属性的值都设置了0；那么这时候如果子级没有设置宽高，则会被拉开到和父级一样宽高。
+    而现在设置了子级的宽高，所以宽高会按照我们的设置来显示，但是实际上子级的虚拟占位已经撑满了整个父级，这时候再给它一个margin
+    auto它就可以上下左右都居中了
+    */
+    
+    /*
+    2.思路（定位配合css3位移）：父级相对定位，子级绝对定位，而top，left这两个属性的如果给百分比
+    那么这个百分比则是相对于父级的宽高来进行计算的；如果只给定这两个值，则子级的右上角会和父级的中心点对齐，得到下图：
+    这时候则需要进一步操作：css3中的位移属性，则是根据自身来计算百分比的；所以只需要利用这个属性把自身再往左上角各移动50%就可以让子级在父级中上下左右都居中了
+    */
+    
+    /*
+    3.思路（利用flex布局）：justify-content属性定义了项目在主轴（横轴）上的对齐方式;align-items属性定义项目在交叉轴（垂直）上如何对齐
+    */
+    
+    /*
+    4.思路（网格布局 Grid）：兼容性比较差
+    */
+    </script>
+    <style>
+        .content1 {
+            width: 500px;
+            height: 300px;
+            background-color: green;
+            position: relative;
+        }
+        .box1 {
+            width: 100px;
+            height: 40px;
+            background-color: #f0a238;
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            margin: auto;
+        }
+    
+        .content2 {
+            width: 500px;
+            height: 300px;
+            border: 1px solid #0a3b98;
+            position: relative;
+        }
+        .box2 {
+            width: 100px;
+            height: 40px;
+            background: #f0a238;
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+        }
+    
+        .content3{
+            width: 500px;
+            height: 300px;
+            border: 1px solid #0a3b98;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        .box3{
+            width: 100px;
+            height: 40px;
+            background: #f0a238;
+        }
+    
+        .content4{
+            width: 500px;
+            height: 300px;
+            border: 1px solid #0a3b98;
+            display: grid;
+            justify-content: center;
+            align-items: center;
+        }
+        .box4{
+            width: 100px;
+            height: 40px;
+            background: #f0a238;
+        }
+
+        .line{
+            height: 1px;
+            transform: scale(0.5);
+            background-color: red;
+        }
+
+      
+    </style>

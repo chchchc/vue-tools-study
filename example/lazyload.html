@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>懒加载</title>
+</head>
+<body>
+  <img src="../assetes/image/load.gif" data-src="../assetes/image/user.png" alt="">
+  <img src="../assetes/image/load.gif" data-src="../assetes/image/user.png" alt="">
+  <img src="../assetes/image/load.gif" data-src="../assetes/image/user.png" alt="">
+  <img src="../assetes/image/load.gif" data-src="../assetes/image/user.png" alt="">
+  <img src="../assetes/image/load.gif" data-src="../assetes/image/user.png" alt="">
+  <img src="../assetes/image/load.gif" data-src="../assetes/image/user.png" alt="">
+  <img src="../assetes/image/load.gif" data-src="../assetes/image/user.png" alt="">
+  <img src="../assetes/image/load.gif" data-src="../assetes/image/user.png" alt="">
+  <img src="../assetes/image/load.gif" data-src="../assetes/image/user.png" alt="">
+  <img src="../assetes/image/load.gif" data-src="../assetes/image/user.png" alt="">
+  <img src="../assetes/image/load.gif" data-src="../assetes/image/user.png" alt="">
+  <img src="../assetes/image/load.gif" data-src="../assetes/image/user.png" alt="">
+  <img src="../assetes/image/load.gif" data-src="../assetes/image/user.png" alt="">
+  <img src="../assetes/image/load.gif" data-src="../assetes/image/user.png" alt="">
+  <img src="../assetes/image/load.gif" data-src="../assetes/image/user.png" alt="">
+  <img src="../assetes/image/load.gif" data-src="../assetes/image/user.png" alt="">
+  <img src="../assetes/image/load.gif" data-src="../assetes/image/user.png" alt="">
+  <img src="../assetes/image/load.gif" data-src="../assetes/image/user.png" alt="">
+  <img src="../assetes/image/load.gif" data-src="../assetes/image/user.png" alt="">
+  <img src="../assetes/image/load.gif" data-src="../assetes/image/user.png" alt="">
+  <img src="../assetes/image/load.gif" data-src="../assetes/image/user.png" alt="">
+  <img src="../assetes/image/load.gif" data-src="../assetes/image/user.png" alt="">
+  <img src="../assetes/image/load.gif" data-src="../assetes/image/user.png" alt="">
+  <img src="../assetes/image/load.gif" data-src="../assetes/image/user.png" alt="">
+  <img src="../assetes/image/load.gif" data-src="../assetes/image/user.png" alt="">
+  <img src="../assetes/image/load.gif" data-src="../assetes/image/user.png" alt="">
+  <img src="../assetes/image/load.gif" data-src="../assetes/image/user.png" alt="">
+  <img src="../assetes/image/load.gif" data-src="../assetes/image/user.png" alt="">
+  <img src="../assetes/image/load.gif" data-src="../assetes/image/user.png" alt="">
+  <img src="../assetes/image/load.gif" data-src="../assetes/image/user.png" alt="">
+  <img src="../assetes/image/load.gif" data-src="../assetes/image/user.png" alt="">
+  <img src="../assetes/image/load.gif" data-src="../assetes/image/user.png" alt="">
+  <img src="../assetes/image/load.gif" data-src="../assetes/image/user.png" alt="">
+  
+  <script>
+    // 1.多个请求 =》 变成一个请求
+    // 2.懒加载
+    // 3.存在于当前视口的图片优先加载
+    let num = document.getElementsByTagName('img').length;
+    let img = document.getElementsByTagName('img');
+
+    let n = 0;
+    console.log('dddddddddddddddddddddddddddddd')
+    function lazyload(){
+      // 可见区域的高度
+      let seeHeight = document.documentElement.clientHeight;
+      // 滚动条距离顶部的高度
+      let scrollTop = document.documentElement.scrollTop || document.body.scrollTop;
+      //offsetTop定义可见：https://blog.csdn.net/jinxi1112/article/details/90692484
+
+      for(let i=n;i<num;i++){
+        console.log('img[i]',img[i].offsetTop,seeHeight,scrollTop)
+        if(img[i].offsetTop < seeHeight + scrollTop){
+          if(img[i].getAttribute('src') === '../assetes/image/load.gif'){
+            img[i].src = img[i].getAttribute('data-src')
+          };
+          n = i + 1;
+        }
+      }
+      // console.log('seeHeight',seeHeight)
+      // console.log('scrollTop',scrollTop)
+    }
+    // 加延迟是为了让界面渲染完毕再进行第一次计算
+    setTimeout(function(){
+      lazyload();
+    },0)
+    
+    window.onscroll = lazyload
+
+  </script>
+</body>
+</html>
+
+<style>
+  /* 加宽高能确定好offsetTop的值 */
+  img{
+    width: 320px;
+    height: 350px;
+    display: block;
+  }
+</style>

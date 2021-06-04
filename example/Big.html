@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>获取dom的某个属性</title>
+  </head>
+  <script src="../assetes/js/jquery-1.11.3/jquery-1.11.3.js"></script>
+  <body>
+    <div class="waibu">
+      <div class="top">头部</div>
+      <div class="center">
+        <ul id="uldom">
+          <li name="one">111111111111</li>
+          <li name="demo" age="18">111111111111</li>
+          <li name="one">111111111111</li>
+          <li name="demo" age="20">111111111111</li>
+          <li name="demo">111111111111</li>
+          <li name="one">111111111111</li>
+          <li name="one">111111111111</li>
+          <li name="one">111111111111</li>
+          <li>2</li>
+          <li>2</li>
+          <li>2</li>
+          <li>2</li>
+          <li>2</li>
+          <li>2</li>
+          <li>2</li>
+          <li>2</li>
+          <li>2</li>
+          <li>2</li>
+          <li>2</li>
+          <li>2</li>
+          <li>2</li>
+          <li>2</li>
+          <li>2</li>
+          <li>2</li>
+          <li>2</li>
+          <li>2</li>
+          <li>2</li>
+          <li>2</li>
+          <li>2</li>
+          <li>2</li>
+          <li>2</li>
+          <li>2</li>
+          <li>2</li>
+          <li>2</li>
+          <li>2</li>
+          <li>2</li>
+          <li>2</li>
+          <li>2</li>
+          <li>2</li>
+          <li>2</li>
+          <li>2</li>
+          <li>2</li>
+          <li>2</li>
+          <li>2</li>
+          <li>2</li>
+          <li>2</li>
+          <li>2</li>
+          <li>2</li>
+          <li>2</li>
+          <li>2</li>
+          <li>2</li>
+          <li>2</li>
+          <li>2</li>
+          <li>2</li>
+          <li>2</li>
+          <li>2</li>
+          <li>2</li>
+          <li>2</li>
+          <li>2</li>
+          <li>2</li>
+          <li>2</li>
+          <li>2</li>
+          <li>2</li>
+          <li>2</li>
+          <li>2</li>
+          <li>2</li>
+          <li>2</li>
+          <li>2</li>
+          <li>2</li>
+        </ul>
+      </div>
+      <div class="bottom">底部</div>
+    </div>
+  </body>
+</html>
+
+<script>
+  $(function () {
+    var abc = $("li").each(function () {
+      // console.log($(this).attr("age"));
+      if (typeof $(this).attr("age") == "undefined") {
+        // console.log("wu");
+      }
+     
+    });
+
+     
+      // let timer = setInterval(() => {
+      //   if($('#filter').length>0){
+      //     clearInterval(timer)
+      //     $("#filter").append('<a class="bui-btn buiFilterfilter" ><i class="icon-filter"></i></a>');
+      //     $(".bui-btn"+".buiFilterfilter").on("click",function(){
+      //         dialog.open();
+      //     });
+      //   }
+      // }, 50);
+
+  });
+</script>
+<style>
+  .waibu{
+      height: 100vh;
+      position: relative;
+  }
+  .top {
+    height: 50px;
+    width: 100%;
+    background: rgb(103, 110, 95);
+    position: fixed;
+    top: 0;
+  }
+  .bottom {
+    height: 70px;
+    width: 100%;
+    background: chocolate;
+    position: fixed;
+    bottom: 0;
+  }
+  .center {
+    height: calc(100vh - 120px);
+    /* height: 200px; */
+    /* position: absolute; */
+    /* top: 50px;
+    bottom: 70px;
+    left: 0;
+    right: 0;
+    overflow: hidden; */
+  }
+</style>
